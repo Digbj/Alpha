@@ -7,6 +7,7 @@ import moonModel from './source/moon.gltf';
 import newMoonModel from './source/moonhalfcut.gltf'; 
 import brainRightModel from './source/brainright.gltf'; 
 import brainLeftModel from './source/brainleft.gltf'; 
+// import heartModel from './source/heart-shape.gltf'
 import gsap from "gsap";
 
 
@@ -16,9 +17,12 @@ const Moon = () => {
   const rightBrainRef = useRef();
   const leftBrainRef = useRef();
   const arcLightRef = useRef();
+  // const heartRef = useRef();
   const [isAnimating, setIsAnimating] = useState(false);
   const [showNewMoon, setShowNewMoon] = useState(false);
   const [showText, setShowText] = useState(true); // Adding new state for text visibility
+  // const [showHeart, setShowHeart] = useState(false);
+
 
   // Animation for the rotating moon and displaying the text after the new moon is shown
   useFrame((state, delta) => {
@@ -32,10 +36,12 @@ const Moon = () => {
   const newMoonGltf = useLoader(GLTFLoader, newMoonModel);
   const rightBrainGltf = useLoader(GLTFLoader, brainRightModel);
   const leftBrainGltf = useLoader(GLTFLoader, brainLeftModel);
+  // const heartGltf = useLoader(GLTFLoader, heartModel);
+
 
   // Creating the arc light
-  const arcLight = new THREE.PointLight(0xffffff, 10, 100); 
-  arcLight.position.set(0, 2, 0);
+  const arcLight = new THREE.PointLight(0xffffff, 100, 100); 
+  arcLight.position.set(0, 0.8, 0);
 
   // Event handler for the mouse wheel
   const handleMouseWheel = (event) => {
@@ -95,6 +101,17 @@ const Moon = () => {
 
   };
 
+  const handleBrainClick = () => {
+    if (!isAnimating && showNewMoon) {
+      setIsAnimating(true);
+      gsap.to(rightBrainRef.current.position, { duration: 0.02, x:-8, y: 0,z:0, opacity: 0, scale: 10 });
+      gsap.to(leftBrainRef.current.position, { duration:  0.02, x:-8, y: 0,z:-0, opacity: 0, scale: 10, onComplete: () => setIsAnimating(false) });
+    }
+    // setShowHeart(true);
+  };
+  
+
+
   return (
     <>
       {!showNewMoon ? (
@@ -109,16 +126,16 @@ const Moon = () => {
         </group>
       ) : (
         <group onClick={handleNewMoonClick}>
-          <group ref={newMoonRef} scale={1}>
+          <group onClick={handleBrainClick} ref={newMoonRef} scale={1}>
             {/* Render the new moon model in the center */}
-            <primitive object={newMoonGltf.scene} position={[0, 0, 0]} />
+            <primitive object={newMoonGltf.scene} position={[4, 0, 0]}/>
             {/* Render the brain models beside the new moon */}
-            <group ref={rightBrainRef} scale={1} position={[3, 0, 0]}>
-              <primitive object={rightBrainGltf.scene} />
-            </group>
-            <group ref={leftBrainRef} scale={1} position={[-3, 0, 0]}>
-              <primitive object={leftBrainGltf.scene} />
-            </group>
+            <group ref={rightBrainRef} scale={0.8} position={[0, 0, 0]}>
+          <primitive object={rightBrainGltf.scene} />
+        </group>
+        <group ref={leftBrainRef} scale={0.8} position={[0, 0, 0]}>
+          <primitive object={leftBrainGltf.scene} />
+        </group>
           </group>
           {/* Display the text */}
           {showText && (

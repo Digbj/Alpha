@@ -12,6 +12,7 @@ function App() {
         <pointLight position={[5, 5, 5]} />
         <Moon />
       </Canvas>
+      
     </div>
   );
 }
