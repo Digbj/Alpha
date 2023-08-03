@@ -1,0 +1,19 @@
+.App {
+  text-align: center;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+}
+.container {
+  position: relative;
+}
+
+.text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 20px;
+  pointer-events: none;
+}
